@@ -1,0 +1,26 @@
+@use 'variables' as *;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin glass-panel($opacity: 0.55) {
+  background: rgba(15, 15, 20, $opacity);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+@mixin story-aspect-box {
+  aspect-ratio: 9 / 16;
+  position: relative;
+  overflow: hidden;
+}
+
+@mixin desktop {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
