@@ -1,0 +1,177 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.viewport {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: $color-bg-dark;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.videoFeed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  &.mirrored {
+    transform: scaleX(-1);
+  }
+}
+
+.topBar {
+  position: relative;
+  z-index: $z-overlay;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px;
+}
+
+.guestBadge {
+  @include glass-panel(0.6);
+  color: #ffffff;
+  border-radius: $radius-full;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iconBtn {
+  @include glass-panel(0.6);
+  @include flex-center;
+  width: 44px;
+  height: 44px;
+  border-radius: $radius-full;
+  color: #ffffff;
+}
+
+.errorOverlay {
+  position: relative;
+  z-index: $z-overlay;
+  margin: auto 24px;
+  @include glass-panel(0.8);
+  padding: 24px;
+  border-radius: $radius-lg;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+}
+
+.bottomBar {
+  position: relative;
+  z-index: $z-overlay;
+  padding: 16px 20px 30px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.modeSelector {
+  display: flex;
+  gap: 16px;
+  @include glass-panel(0.5);
+  padding: 6px 14px;
+  border-radius: $radius-full;
+}
+
+.modeBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+
+  &.active {
+    color: $color-gold;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.controlsRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.shutterWrap {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  @include flex-center;
+}
+
+.progressRing {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+  pointer-events: none;
+
+  circle {
+    fill: none;
+    stroke: $color-gold;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.06s linear;
+  }
+}
+
+.shutterBtn {
+  width: 74px;
+  height: 74px;
+  border-radius: $radius-full;
+  border: 4px solid #ffffff;
+  background: rgba(255, 255, 255, 0.25);
+  @include flex-center;
+  padding: 6px;
+  transition: transform 0.15s;
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  .shutterInner {
+    width: 100%;
+    height: 100%;
+    border-radius: $radius-full;
+    background: #ffffff;
+    transition: all 0.2s;
+  }
+
+  &.recording .shutterInner {
+    background: $color-danger;
+    transform: scale(0.6);
+    border-radius: 12px;
+  }
+}
+
+.hiddenFileInput {
+  display: none;
+}
