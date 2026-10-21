@@ -3,6 +3,8 @@ import {
   calculateQrPlacement,
   PRESET_TEMPLATES,
   getPresetById,
+  calculatePdfFit,
+  PrintFormat,
 } from '../qrTemplateComposer';
 
 describe('QR Template Composer Utilities', () => {
@@ -57,5 +59,35 @@ describe('QR Template Composer Utilities', () => {
     expect(floral).toBeDefined();
     expect(floral?.name).toBe('Floral Dourado');
     expect(floral?.title).toContain('Gabi & Andrew');
+  });
+
+  it('calculates PDF fit maintaining exact aspect ratio without stretching or distortion', () => {
+    // Caso 1: Imagem estilo Story do Canva (1080x1920) em página A4 (210x297mm)
+    const fitA4Story = calculatePdfFit(1080, 1920, 'a4');
+    expect(fitA4Story.pageWidthMm).toBe(210);
+    expect(fitA4Story.pageHeightMm).toBe(297);
+    expect(fitA4Story.renderHeightMm).toBe(297);
+    expect(fitA4Story.renderWidthMm).toBeCloseTo(167.06, 1);
+    expect(fitA4Story.offsetX).toBeCloseTo(21.47, 1);
+    expect(fitA4Story.offsetY).toBe(0);
+
+    // O aspect ratio renderizado deve ser IDÊNTICO ao da imagem original (zero esticamento)
+    const originalAspect = 1080 / 1920;
+    const renderedAspect = fitA4Story.renderWidthMm / fitA4Story.renderHeightMm;
+    expect(renderedAspect).toBeCloseTo(originalAspect, 4);
+
+    // Caso 2: Formato Mesa / Porta-Retrato (10x15cm)
+    const fit10x15 = calculatePdfFit(1240, 1754, '10x15');
+    expect(fit10x15.pageWidthMm).toBe(100);
+    expect(fit10x15.pageHeightMm).toBe(150);
+    expect(fit10x15.renderWidthMm / fit10x15.renderHeightMm).toBeCloseTo(1240 / 1754, 4);
+
+    // Caso 3: Formato Proporção Original da Arte (sem margens brancas)
+    const fitOriginal = calculatePdfFit(1080, 1920, 'original');
+    expect(fitOriginal.offsetX).toBe(0);
+    expect(fitOriginal.offsetY).toBe(0);
+    expect(fitOriginal.renderWidthMm).toBe(fitOriginal.pageWidthMm);
+    expect(fitOriginal.renderHeightMm).toBe(fitOriginal.pageHeightMm);
+    expect(fitOriginal.pageWidthMm / fitOriginal.pageHeightMm).toBeCloseTo(1080 / 1920, 4);
   });
 });

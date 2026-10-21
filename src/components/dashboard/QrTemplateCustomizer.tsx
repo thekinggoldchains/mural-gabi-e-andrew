@@ -14,6 +14,7 @@ import {
 import {
   PRESET_TEMPLATES,
   PresetTemplate,
+  PrintFormat,
   getPresetById,
   calculateQrPlacement,
   drawPresetToCanvas,
@@ -36,6 +37,7 @@ export const QrTemplateCustomizer: React.FC<QrTemplateCustomizerProps> = ({
   const [xPercent, setXPercent] = useState<number>(50);
   const [yPercent, setYPercent] = useState<number>(55);
   const [withCardBackdrop, setWithCardBackdrop] = useState<boolean>(true);
+  const [printFormat, setPrintFormat] = useState<PrintFormat>('10x15');
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -154,7 +156,13 @@ export const QrTemplateCustomizer: React.FC<QrTemplateCustomizerProps> = ({
     if (!canvasRef.current || isExporting) return;
     setIsExporting(true);
     try {
-      await exportCanvasToPdf(canvasRef.current, 'Mural_Casamento_Gabi_Andrew_A4.pdf');
+      const filename =
+        printFormat === '10x15'
+          ? 'Mural_Casamento_Mesa_10x15.pdf'
+          : printFormat === 'a4'
+          ? 'Mural_Casamento_A4.pdf'
+          : 'Mural_Casamento_Arte_Original.pdf';
+      await exportCanvasToPdf(canvasRef.current, printFormat, filename);
     } finally {
       setIsExporting(false);
     }
@@ -304,7 +312,46 @@ export const QrTemplateCustomizer: React.FC<QrTemplateCustomizerProps> = ({
           </label>
         </div>
 
-        {/* 3. Ações de Download */}
+        {/* 3. Formato da Folha de Impressão */}
+        <div className={styles.controlGroup}>
+          <label>Tamanho do Papel para Imprimir</label>
+          <div className={styles.formatRow}>
+            <button
+              type="button"
+              className={`${styles.formatBtn} ${
+                printFormat === '10x15' ? styles.active : ''
+              }`}
+              onClick={() => setPrintFormat('10x15')}
+            >
+              <span>10 × 15 cm</span>
+              <span>Display de Mesa</span>
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.formatBtn} ${
+                printFormat === 'a4' ? styles.active : ''
+              }`}
+              onClick={() => setPrintFormat('a4')}
+            >
+              <span>A4 (21×29 cm)</span>
+              <span>Quadro / Totem</span>
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.formatBtn} ${
+                printFormat === 'original' ? styles.active : ''
+              }`}
+              onClick={() => setPrintFormat('original')}
+            >
+              <span>Arte Original</span>
+              <span>Sem bordas</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 4. Ações de Download */}
         <div className={styles.exportSection}>
           <button
             type="button"
@@ -314,7 +361,15 @@ export const QrTemplateCustomizer: React.FC<QrTemplateCustomizerProps> = ({
           >
             <FileText size={18} />
             <span>
-              {isExporting ? 'Gerando PDF...' : 'Baixar PDF para Impressão (A4)'}
+              {isExporting
+                ? 'Gerando PDF...'
+                : `Baixar PDF para Impressão (${
+                    printFormat === '10x15'
+                      ? '10×15 cm'
+                      : printFormat === 'a4'
+                      ? 'A4'
+                      : 'Original'
+                  })`}
             </span>
           </button>
 

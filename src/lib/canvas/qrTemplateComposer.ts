@@ -14,6 +14,86 @@ export interface QrRect {
   size: number;
 }
 
+export type PrintFormat = 'a4' | '10x15' | 'original';
+
+export interface PdfFitResult {
+  pageWidthMm: number;
+  pageHeightMm: number;
+  renderWidthMm: number;
+  renderHeightMm: number;
+  offsetX: number;
+  offsetY: number;
+  orientation: 'portrait' | 'landscape';
+}
+
+export function calculatePdfFit(
+  canvasWidth: number,
+  canvasHeight: number,
+  format: PrintFormat = 'a4'
+): PdfFitResult {
+  const imageAspect = canvasWidth / canvasHeight;
+
+  if (format === 'original') {
+    // Normaliza para que a maior dimensão caiba com folga em folha padrão (ex: 210mm)
+    const baseDimension = 210;
+    const pageWidthMm = imageAspect >= 1 ? baseDimension : baseDimension * imageAspect;
+    const pageHeightMm = imageAspect >= 1 ? baseDimension / imageAspect : baseDimension;
+
+    return {
+      pageWidthMm,
+      pageHeightMm,
+      renderWidthMm: pageWidthMm,
+      renderHeightMm: pageHeightMm,
+      offsetX: 0,
+      offsetY: 0,
+      orientation: imageAspect >= 1 ? 'landscape' : 'portrait',
+    };
+  }
+
+  // Dimensões nominais padrão da folha em mm
+  let pageWidthMm = 210;
+  let pageHeightMm = 297;
+
+  if (format === '10x15') {
+    pageWidthMm = 100;
+    pageHeightMm = 150;
+  }
+
+  // Ajusta orientação se o canvas for paisagem
+  const isLandscape = canvasWidth > canvasHeight;
+  if (isLandscape) {
+    const temp = pageWidthMm;
+    pageWidthMm = pageHeightMm;
+    pageHeightMm = temp;
+  }
+
+  const pageAspect = pageWidthMm / pageHeightMm;
+  let renderWidthMm = pageWidthMm;
+  let renderHeightMm = pageHeightMm;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  if (imageAspect > pageAspect) {
+    // Imagem proporcionalmente mais larga que a página
+    renderHeightMm = pageWidthMm / imageAspect;
+    offsetY = (pageHeightMm - renderHeightMm) / 2;
+  } else {
+    // Imagem proporcionalmente mais alta/estreita (ex: Story do Canva ou 9:16)
+    renderWidthMm = pageHeightMm * imageAspect;
+    offsetX = (pageWidthMm - renderWidthMm) / 2;
+  }
+
+  return {
+    pageWidthMm,
+    pageHeightMm,
+    renderWidthMm,
+    renderHeightMm,
+    offsetX,
+    offsetY,
+    orientation: isLandscape ? 'landscape' : 'portrait',
+  };
+}
+
 export interface PresetTemplate {
   id: 'minimalist' | 'floral' | 'rustic';
   name: string;
@@ -195,25 +275,33 @@ export function drawQrOnCanvas(
 }
 
 /**
- * Exporta o canvas montado como PDF de Alta Resolução padrão A4 para impressão
+ * Exporta o canvas montado como PDF de Alta Resolução mantendo o aspect ratio exato (sem esticar)
  */
 export async function exportCanvasToPdf(
   canvas: HTMLCanvasElement,
+  format: PrintFormat = 'a4',
   filename = 'QR_Code_Casamento_Gabi_Andrew.pdf'
 ): Promise<void> {
   const imgData = canvas.toDataURL('image/png', 1.0);
-  const isLandscape = canvas.width > canvas.height;
+  const fit = calculatePdfFit(canvas.width, canvas.height, format);
 
   const pdf = new jsPDF({
-    orientation: isLandscape ? 'landscape' : 'portrait',
+    orientation: fit.orientation,
     unit: 'mm',
-    format: 'a4',
+    format: [fit.pageWidthMm, fit.pageHeightMm],
   });
 
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = pdf.internal.pageSize.getHeight();
+  pdf.addImage(
+    imgData,
+    'PNG',
+    fit.offsetX,
+    fit.offsetY,
+    fit.renderWidthMm,
+    fit.renderHeightMm,
+    undefined,
+    'FAST'
+  );
 
-  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
   pdf.save(filename);
 }
 
