@@ -1,0 +1,69 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.card {
+  background: $color-surface-light;
+  border-radius: $radius-md;
+  border: 1px solid #e8e2d9;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.previewWrapper {
+  width: 100%;
+  @include story-aspect-box;
+}
+
+.cardFooter {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.metaInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  strong {
+    font-size: 0.95rem;
+    color: $color-text-primary;
+  }
+
+  span {
+    font-size: 0.78rem;
+    color: $color-text-muted;
+  }
+}
+
+.actionsRow {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: $radius-sm;
+  border: 1px solid #dfd9ce;
+  background: $color-bg-light;
+  color: $color-text-primary;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    background: $color-champagne;
+  }
+
+  &.dangerBtn {
+    color: $color-danger;
+  }
+}

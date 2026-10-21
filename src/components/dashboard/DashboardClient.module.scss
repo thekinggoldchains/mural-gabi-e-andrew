@@ -1,0 +1,95 @@
+@use '@/styles/variables' as *;
+
+.dashboardShell {
+  display: flex;
+  min-height: 100vh;
+  background: $color-bg-light;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+}
+
+.topHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+
+  h2 {
+    font-family: $font-serif;
+    font-size: 1.85rem;
+    color: $color-text-primary;
+  }
+
+  p {
+    color: $color-text-muted;
+    font-size: 0.92rem;
+  }
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.searchInput {
+  padding: 10px 14px;
+  border-radius: $radius-md;
+  border: 1px solid #dcd5ca;
+  background: $color-surface-light;
+  font-size: 0.9rem;
+  min-width: 220px;
+}
+
+.zipBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: none;
+  border-radius: $radius-md;
+  background: $color-gold;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.92rem;
+
+  &:hover:not(:disabled) {
+    background: $color-gold-hover;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.qrCard {
+  background: $color-surface-light;
+  border: 1px solid #e8e2d9;
+  border-radius: $radius-lg;
+  padding: 40px;
+  max-width: 480px;
+  text-align: center;
+
+  h3 {
+    font-family: $font-serif;
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: $color-text-muted;
+    margin-bottom: 24px;
+  }
+}
