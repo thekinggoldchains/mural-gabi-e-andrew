@@ -1,0 +1,308 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: $color-surface-light;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: $radius-lg;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+
+  @include desktop {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 36px;
+    padding: 32px;
+  }
+}
+
+.previewColumn {
+  flex: 1.1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.canvasWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1 / 1.414; // Proporção A4 vertical
+  background: #ffffff;
+  border-radius: $radius-md;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+  }
+}
+
+.dragHint {
+  font-size: 0.8rem;
+  color: $color-text-muted;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.controlsColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $color-text-primary;
+  }
+
+  p {
+    font-size: 0.88rem;
+    color: $color-text-muted;
+    line-height: 1.4;
+  }
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: $color-text-primary;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: $color-text-muted;
+    }
+  }
+}
+
+.presetsRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+
+  @include desktop {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.presetBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: $radius-sm;
+  border: 1.5px solid rgba(0, 0, 0, 0.09);
+  background: $color-surface-light;
+  text-align: left;
+  transition: all 0.2s ease;
+
+  span:first-child {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+
+  span:last-child {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+  }
+
+  &:hover {
+    border-color: $color-gold;
+    background: rgba($color-champagne, 0.35);
+  }
+
+  &.active {
+    border-color: $color-gold;
+    background: rgba($color-champagne, 0.55);
+    box-shadow: 0 0 0 1px $color-gold;
+  }
+}
+
+.uploadBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: $radius-sm;
+  border: 1.5px dashed $color-gold;
+  background: rgba($color-champagne, 0.25);
+  color: $color-gold-hover;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba($color-champagne, 0.6);
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+}
+
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  input[type='range'] {
+    flex: 1;
+    accent-color: $color-gold;
+    cursor: pointer;
+  }
+}
+
+.quickActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.centerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: $radius-sm;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: $color-surface-light;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: $color-text-primary;
+  transition: all 0.2s;
+
+  &:hover {
+    background: $color-champagne;
+    border-color: $color-gold;
+  }
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem !important;
+  color: $color-text-muted !important;
+  cursor: pointer;
+  user-select: none;
+
+  input[type='checkbox'] {
+    accent-color: $color-gold;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+}
+
+.exportSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.primaryPdfBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: $radius-sm;
+  border: none;
+  background: linear-gradient(135deg, $color-gold 0%, $color-gold-hover 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba($color-gold, 0.35);
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba($color-gold, 0.45);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.secondaryRow {
+  display: flex;
+  gap: 10px;
+}
+
+.secondaryBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: $radius-sm;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: $color-surface-light;
+  color: $color-text-primary;
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba($color-champagne, 0.35);
+    border-color: $color-gold;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.hiddenQrContainer {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+  pointer-events: none;
+}

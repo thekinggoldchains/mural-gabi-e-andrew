@@ -2,12 +2,12 @@
 
 import React, { useState, useMemo } from 'react';
 import { FolderDown } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
 import { Post } from '@/types/post';
 import { useRealtimePosts } from '@/hooks/useRealtimePosts';
 import { buildMemoriesZip } from '@/lib/zipDownload';
 import { DashboardSidebar, DashboardTab } from './DashboardSidebar';
 import { MediaCard } from './MediaCard';
+import { QrTemplateCustomizer } from './QrTemplateCustomizer';
 import styles from './DashboardClient.module.scss';
 
 interface DashboardClientProps {
@@ -138,13 +138,7 @@ export const DashboardClient: React.FC<DashboardClientProps> = ({
         </header>
 
         {activeTab === 'qrcode' ? (
-          <div className={styles.qrCard}>
-            <h3>QR Code Oficial da Festa</h3>
-            <p>
-              Imprima para colocar nas mesas ou exiba na entrada do salão:
-            </p>
-            <QRCodeSVG value={captureUrl} size={240} />
-          </div>
+          <QrTemplateCustomizer captureUrl={captureUrl} />
         ) : (
           <section className={styles.mediaGrid}>
             {displayedPosts.map((post, idx) => (
