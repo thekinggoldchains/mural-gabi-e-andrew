@@ -1,0 +1,16 @@
+@use '@/styles/variables' as *;
+
+.toast {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  background: $color-success;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: $radius-full;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
