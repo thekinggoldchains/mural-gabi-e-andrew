@@ -1,0 +1,172 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.wallViewport {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: $color-bg-dark;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ambientBg {
+  position: absolute;
+  inset: -40px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(48px) brightness(0.38) saturate(1.2);
+  transform: scale(1.1);
+  transition: background-image 0.8s ease;
+}
+
+.stageLayout {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1480px;
+  height: 90vh;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+}
+
+.storyCard {
+  height: 88vh;
+  @include story-aspect-box;
+  border-radius: $radius-lg;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  background: #000000;
+}
+
+.progressHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  padding: 14px 16px 24px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent);
+}
+
+.progressBarTrack {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: $radius-full;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #ffffff;
+  animation-name: storyProgressLinear;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes storyProgressLinear {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.authorRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ffffff;
+}
+
+.authorName {
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.priorityBadge {
+  background: $color-gold;
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: $radius-full;
+}
+
+.sidePanel {
+  @include glass-panel(0.65);
+  border-radius: $radius-lg;
+  padding: 32px 28px;
+  width: 320px;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+
+  h2 {
+    font-family: $font-serif;
+    font-size: 1.7rem;
+    color: $color-champagne;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.45;
+  }
+}
+
+.qrBox {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: $radius-md;
+  @include flex-center;
+}
+
+.emptyState {
+  @include glass-panel(0.75);
+  border-radius: $radius-lg;
+  padding: 48px;
+  text-align: center;
+  color: #ffffff;
+  max-width: 560px;
+
+  h1 {
+    font-family: $font-serif;
+    font-size: 2.3rem;
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.fullscreenBtn {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  z-index: 20;
+  @include glass-panel(0.4);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: $radius-full;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
